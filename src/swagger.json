@@ -1,0 +1,296 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Introdução ao S.O.L.I.D",
+      "description": "This is an API SOLID",
+      "version": "1.0.0",
+      "contact": {
+        "email": "lubni.morais@gmail.com"
+      }
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3333",
+        "description": "Development Server"
+      }
+    ],
+    "paths": {
+      "/users": {
+        "post": {
+          "tags": ["users"],
+          "summary": "Create a user",
+          "description": "Createa a new user",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "name": "user name sample",
+                    "email": "usermail@mail.com"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "admin": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "E-mail já está utilizado",
+              "content": {
+                  "application/json": {
+                      "schema": {
+                          "type": "object",
+                          "properties": {
+                              "error": {
+                                "type": "string"
+                              }
+                          }
+                      }
+                  }
+              }
+            }
+          }
+        },
+        "get": {
+          "tags": ["users"],
+          "summary": "List all users",
+          "description": "Somente usuários <b>admin</b> podem acessar ",
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "header",
+              "required": "true"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "admin": {
+                          "type": "boolean"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }           
+                }
+              }
+            }
+          }
+        }
+      },
+      "/users/{user_id}/admin": {
+        "patch": {
+            "tags": ["users"],
+            "summary": "Torna um usuário admin",
+            "description": "Torna um usuário em um admininstrador",
+            "parameters": [
+              {
+                "name": "user_id",
+                 "in": "path",
+                 "required": "true",
+                 "description": "Id in format UUID of user"
+              }
+            ],
+           "responses": {
+              "200": {
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "admin": {
+                          "type": "boolean",
+                          "default": true
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "404": {
+                "description": "E-mail já está utilizado",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                  "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+              }
+            }
+          }
+        },
+      "/users/{user_id}": {
+        "get": {
+          "tags": ["users"],
+          "summary": "Show profile",
+          "description": "Show profile of an user",
+          "parameters": [
+            {
+              "name": "user_id",
+               "in": "path",
+               "required": "true",
+               "description": "Id in format UUID of user"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "admin": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                    
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found",
+              "content": {
+                "apllication/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
